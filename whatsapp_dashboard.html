@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BBSR WhatsApp Outreach Dashboard</title>
+  <style>
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: #f0f2f5; margin: 0; padding: 20px; color: #111b21; }
+    .container { max-width: 1000px; margin: 0 auto; }
+    header { background: #075e54; color: white; padding: 20px 25px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    h1 { margin: 0 0 8px 0; font-size: 24px; }
+    p { margin: 0; opacity: 0.9; font-size: 14px; }
+    .stats { display: flex; gap: 15px; margin-top: 15px; }
+    .stat-badge { background: rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+    .filter-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+    .filter-btn { background: white; border: 1px solid #d1d7db; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 13px; font-weight: 600; }
+    .filter-btn.active { background: #128c7e; color: white; border-color: #128c7e; }
+    .card { background: white; border-radius: 12px; padding: 18px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: space-between; gap: 15px; transition: transform 0.15s; }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.12); }
+    .card.contacted { opacity: 0.6; background: #e8f5e9; border: 1px solid #a5d6a7; }
+    .info { flex: 1; }
+    .biz-name { font-size: 16px; font-weight: 700; color: #111b21; display: flex; align-items: center; gap: 8px; }
+    .tag { font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: normal; background: #e7f3ff; color: #1877f2; }
+    .biz-sub { font-size: 13px; color: #667781; margin: 4px 0 8px 0; }
+    .preview-msg { font-size: 12px; background: #f7f8fa; border-left: 3px solid #25d366; padding: 8px 12px; border-radius: 4px; color: #3b4a54; }
+    .action { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; min-width: 160px; }
+    .btn-wa { background: #25d366; color: white; text-decoration: none; padding: 10px 18px; border-radius: 25px; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 2px 6px rgba(37,211,102,0.4); }
+    .btn-wa:hover { background: #20ba5a; }
+    .check-label { font-size: 12px; color: #667781; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+    .landline-box { background: #fff3cd; border: 1px solid #ffeeba; border-radius: 12px; padding: 18px; margin-top: 25px; font-size: 13px; }
+    .landline-box h3 { margin: 0 0 10px 0; color: #856404; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📱 BBSR WhatsApp Outreach Dashboard</h1>
+      <p>Click "Chat on WhatsApp" to open WhatsApp Web or App with the tailored pitch already pre-typed. Just press Enter to send!</p>
+      <div class="stats">
+        <div class="stat-badge">Total Mobile Leads: 32</div>
+        <div class="stat-badge" id="contactedCount">Contacted: 0</div>
+      </div>
+    </header>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterCards('all')">All (32)</button>
+      <button class="filter-btn" onclick="filterCards('cafe')">Cafes & Restaurants</button>
+      <button class="filter-btn" onclick="filterCards('gym')">Gyms</button>
+      <button class="filter-btn" onclick="filterCards('clinic')">Clinics</button>
+    </div>
+
+    <div id="leadsList">
+      
+        <div class="card" data-category="restaurant" id="card-0">
+          <div class="info">
+            <div class="biz-name">
+              Dalma
+              <span class="tag">Restaurant</span>
+            </div>
+            <div class="biz-sub">📍 Unit 4 / Patia &nbsp;|&nbsp; 📞 +919238459239</div>
+            <div class="preview-msg">"Hi Team Dalma! Loved your presence in Unit 4 / Patia. I'm a web developer from Bhubaneswar. I noticed you don't have a direct mobile-friendly website to showcase your digital menu & take direct table reservations (without 30% aggregator commission). I've created a free 2-minute demo preview mockup for Dalma. Can I share the preview link with you?"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/919238459239?text=Hi%20Team%20Dalma!%20Loved%20your%20presence%20in%20Unit%204%20%2F%20Patia.%20I'm%20a%20web%20developer%20from%20Bhubaneswar.%20I%20noticed%20you%20don't%20have%20a%20direct%20mobile-friendly%20website%20to%20showcase%20your%20digital%20menu%20%26%20take%20direct%20table%20reservations%20(without%2030%25%20aggregator%20commission).%20I've%20created%20a%20free%202-minute%20demo%20preview%20mockup%20for%20Dalma.%20Can%20I%20share%20the%20preview%20link%20with%20you%3F" target="_blank" class="btn-wa" onclick="markDone(0)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-0" onchange="toggleCard(0)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="restaurant" id="card-1">
+          <div class="info">
+            <div class="biz-name">
+              Aangan Premium
+              <span class="tag">Restaurant</span>
+            </div>
+            <div class="biz-sub">📍 Gajapati Nagar &nbsp;|&nbsp; 📞 +916742302288</div>
+            <div class="preview-msg">"Hi Team Aangan Premium! Loved your presence in Gajapati Nagar. I'm a web developer from Bhubaneswar. I noticed you don't have a direct mobile-friendly website to showcase your digital menu & take direct table reservations (without 30% aggregator commission). I've created a free 2-minute demo preview mockup for Aangan Premium. Can I share the preview link with you?"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/916742302288?text=Hi%20Team%20Aangan%20Premium!%20Loved%20your%20presence%20in%20Gajapati%20Nagar.%20I'm%20a%20web%20developer%20from%20Bhubaneswar.%20I%20noticed%20you%20don't%20have%20a%20direct%20mobile-friendly%20website%20to%20showcase%20your%20digital%20menu%20%26%20take%20direct%20table%20reservations%20(without%2030%25%20aggregator%20commission).%20I've%20created%20a%20free%202-minute%20demo%20preview%20mockup%20for%20Aangan%20Premium.%20Can%20I%20share%20the%20preview%20link%20with%20you%3F" target="_blank" class="btn-wa" onclick="markDone(1)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-1" onchange="toggleCard(1)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="restaurant" id="card-2">
+          <div class="info">
+            <div class="biz-name">
+              Aangan Exclusive
+              <span class="tag">Restaurant</span>
+            </div>
+            <div class="biz-sub">📍 Saheed Nagar &nbsp;|&nbsp; 📞 +916742545148</div>
+            <div class="preview-msg">"Hi Team Aangan Exclusive! Loved your presence in Saheed Nagar. I'm a web developer from Bhubaneswar. I noticed you don't have a direct mobile-friendly website to showcase your digital menu & take direct table reservations (without 30% aggregator commission). I've created a free 2-minute demo preview mockup for Aangan Exclusive. Can I share the preview link with you?"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/916742545148?text=Hi%20Team%20Aangan%20Exclusive!%20Loved%20your%20presence%20in%20Saheed%20Nagar.%20I'm%20a%20web%20developer%20from%20Bhubaneswar.%20I%20noticed%20you%20don't%20have%20a%20direct%20mobile-friendly%20website%20to%20showcase%20your%20digital%20menu%20%26%20take%20direct%20table%20reservations%20(without%2030%25%20aggregator%20commission).%20I've%20created%20a%20free%202-minute%20demo%20preview%20mockup%20for%20Aangan%20Exclusive.%20Can%20I%20share%20the%20preview%20link%20with%20you%3F" target="_blank" class="btn-wa" onclick="markDone(2)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-2" onchange="toggleCard(2)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="restaurant / sweets" id="card-3">
+          <div class="info">
+            <div class="biz-name">
+              Atmaram's Restaurant & Sweets
+              <span class="tag">Restaurant / Sweets</span>
+            </div>
+            <div class="biz-sub">📍 Jaydev Vihar / Damana &nbsp;|&nbsp; 📞 +916742741553</div>
+            <div class="preview-msg">"Hi Team Atmaram's Restaurant & Sweets! Loved your presence in Jaydev Vihar / Damana. I'm a web developer from Bhubaneswar. I noticed you don't have a direct mobile-friendly website to showcase your digital menu & take direct table reservations (without 30% aggregator commission). I've created a free 2-minute demo preview mockup for Atmaram's Restaurant & Sweets. Can I share the preview link with you?"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/916742741553?text=Hi%20Team%20Atmaram's%20Restaurant%20%26%20Sweets!%20Loved%20your%20presence%20in%20Jaydev%20Vihar%20%2F%20Damana.%20I'm%20a%20web%20developer%20from%20Bhubaneswar.%20I%20noticed%20you%20don't%20have%20a%20direct%20mobile-friendly%20website%20to%20showcase%20your%20digital%20menu%20%26%20take%20direct%20table%20reservations%20(without%2030%25%20aggregator%20commission).%20I've%20created%20a%20free%202-minute%20demo%20preview%20mockup%20for%20Atmaram's%20Restaurant%20%26%20Sweets.%20Can%20I%20share%20the%20preview%20link%20with%20you%3F" target="_blank" class="btn-wa" onclick="markDone(3)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-3" onchange="toggleCard(3)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="restaurant" id="card-4">
+          <div class="info">
+            <div class="biz-name">
+              Aryan Restaurant
+              <span class="tag">Restaurant</span>
+            </div>
+            <div class="biz-sub">📍 Patrapada AIIMS Rd &nbsp;|&nbsp; 📞 +919861133350</div>
+            <div class="preview-msg">"Hi Team Aryan Restaurant! Loved your presence in Patrapada AIIMS Rd. I'm a web developer from Bhubaneswar. I noticed you don't have a direct mobile-friendly website to showcase your digital menu & take direct table reservations (without 30% aggregator commission). I've created a free 2-minute demo preview mockup for Aryan Restaurant. Can I share the preview link with you?"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/919861133350?text=Hi%20Team%20Aryan%20Restaurant!%20Loved%20your%20presence%20in%20Patrapada%20AIIMS%20Rd.%20I'm%20a%20web%20developer%20from%20Bhubaneswar.%20I%20noticed%20you%20don't%20have%20a%20direct%20mobile-friendly%20website%20to%20showcase%20your%20digital%20menu%20%26%20take%20direct%20table%20reservations%20(without%2030%25%20aggregator%20commission).%20I've%20created%20a%20free%202-minute%20demo%20preview%20mockup%20for%20Aryan%20Restaurant.%20Can%20I%20share%20the%20preview%20link%20with%20you%3F" target="_blank" class="btn-wa" onclick="markDone(4)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-4" onchange="toggleCard(4)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="restaurant" id="card-5">
+          <div class="info">
+            <div class="biz-name">
+              Cooks Restaurant
+              <span class="tag">Restaurant</span>
+            </div>
+            <div class="biz-sub">📍 Bhubaneswar &nbsp;|&nbsp; 📞 +916742530025</div>
+            <div class="preview-msg">"Hi Team Cooks Restaurant! Loved your presence in Bhubaneswar. I'm a web developer from Bhubaneswar. I noticed you don't have a direct mobile-friendly website to showcase your digital menu & take direct table reservations (without 30% aggregator commission). I've created a free 2-minute demo preview mockup for Cooks Restaurant. Can I share the preview link with you?"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/916742530025?text=Hi%20Team%20Cooks%20Restaurant!%20Loved%20your%20presence%20in%20Bhubaneswar.%20I'm%20a%20web%20developer%20from%20Bhubaneswar.%20I%20noticed%20you%20don't%20have%20a%20direct%20mobile-friendly%20website%20to%20showcase%20your%20digital%20menu%20%26%20take%20direct%20table%20reservations%20(without%2030%25%20aggregator%20commission).%20I've%20created%20a%20free%202-minute%20demo%20preview%20mockup%20for%20Cooks%20Restaurant.%20Can%20I%20share%20the%20preview%20link%20with%20you%3F" target="_blank" class="btn-wa" onclick="markDone(5)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-5" onchange="toggleCard(5)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="restaurant" id="card-6">
+          <div class="info">
+            <div class="biz-name">
+              Barabati Restaurant
+              <span class="tag">Restaurant</span>
+            </div>
+            <div class="biz-sub">📍 Cuttack Road &nbsp;|&nbsp; 📞 +919338105225</div>
+            <div class="preview-msg">"Hi Team Barabati Restaurant! Loved your presence in Cuttack Road. I'm a web developer from Bhubaneswar. I noticed you don't have a direct mobile-friendly website to showcase your digital menu & take direct table reservations (without 30% aggregator commission). I've created a free 2-minute demo preview mockup for Barabati Restaurant. Can I share the preview link with you?"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/919338105225?text=Hi%20Team%20Barabati%20Restaurant!%20Loved%20your%20presence%20in%20Cuttack%20Road.%20I'm%20a%20web%20developer%20from%20Bhubaneswar.%20I%20noticed%20you%20don't%20have%20a%20direct%20mobile-friendly%20website%20to%20showcase%20your%20digital%20menu%20%26%20take%20direct%20table%20reservations%20(without%2030%25%20aggregator%20commission).%20I've%20created%20a%20free%202-minute%20demo%20preview%20mockup%20for%20Barabati%20Restaurant.%20Can%20I%20share%20the%20preview%20link%20with%20you%3F" target="_blank" class="btn-wa" onclick="markDone(6)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-6" onchange="toggleCard(6)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="restaurant" id="card-7">
+          <div class="info">
+            <div class="biz-name">
+              Amboli Restaurant
+              <span class="tag">Restaurant</span>
+            </div>
+            <div class="biz-sub">📍 Bhubaneswar &nbsp;|&nbsp; 📞 +916742507027</div>
+            <div class="preview-msg">"Hi Team Amboli Restaurant! Loved your presence in Bhubaneswar. I'm a web developer from Bhubaneswar. I noticed you don't have a direct mobile-friendly website to showcase your digital menu & take direct table reservations (without 30% aggregator commission). I've created a free 2-minute demo preview mockup for Amboli Restaurant. Can I share the preview link with you?"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/916742507027?text=Hi%20Team%20Amboli%20Restaurant!%20Loved%20your%20presence%20in%20Bhubaneswar.%20I'm%20a%20web%20developer%20from%20Bhubaneswar.%20I%20noticed%20you%20don't%20have%20a%20direct%20mobile-friendly%20website%20to%20showcase%20your%20digital%20menu%20%26%20take%20direct%20table%20reservations%20(without%2030%25%20aggregator%20commission).%20I've%20created%20a%20free%202-minute%20demo%20preview%20mockup%20for%20Amboli%20Restaurant.%20Can%20I%20share%20the%20preview%20link%20with%20you%3F" target="_blank" class="btn-wa" onclick="markDone(7)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-7" onchange="toggleCard(7)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="restaurant" id="card-8">
+          <div class="info">
+            <div class="biz-name">
+              Arohan Restaurant
+              <span class="tag">Restaurant</span>
+            </div>
+            <div class="biz-sub">📍 Bhubaneswar &nbsp;|&nbsp; 📞 +916742512178</div>
+            <div class="preview-msg">"Hi Team Arohan Restaurant! Loved your presence in Bhubaneswar. I'm a web developer from Bhubaneswar. I noticed you don't have a direct mobile-friendly website to showcase your digital menu & take direct table reservations (without 30% aggregator commission). I've created a free 2-minute demo preview mockup for Arohan Restaurant. Can I share the preview link with you?"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/916742512178?text=Hi%20Team%20Arohan%20Restaurant!%20Loved%20your%20presence%20in%20Bhubaneswar.%20I'm%20a%20web%20developer%20from%20Bhubaneswar.%20I%20noticed%20you%20don't%20have%20a%20direct%20mobile-friendly%20website%20to%20showcase%20your%20digital%20menu%20%26%20take%20direct%20table%20reservations%20(without%2030%25%20aggregator%20commission).%20I've%20created%20a%20free%202-minute%20demo%20preview%20mockup%20for%20Arohan%20Restaurant.%20Can%20I%20share%20the%20preview%20link%20with%20you%3F" target="_blank" class="btn-wa" onclick="markDone(8)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-8" onchange="toggleCard(8)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="restaurant" id="card-9">
+          <div class="info">
+            <div class="biz-name">
+              Ayeena Restaurant
+              <span class="tag">Restaurant</span>
+            </div>
+            <div class="biz-sub">📍 Bhubaneswar &nbsp;|&nbsp; 📞 +916742533084</div>
+            <div class="preview-msg">"Hi Team Ayeena Restaurant! Loved your presence in Bhubaneswar. I'm a web developer from Bhubaneswar. I noticed you don't have a direct mobile-friendly website to showcase your digital menu & take direct table reservations (without 30% aggregator commission). I've created a free 2-minute demo preview mockup for Ayeena Restaurant. Can I share the preview link with you?"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/916742533084?text=Hi%20Team%20Ayeena%20Restaurant!%20Loved%20your%20presence%20in%20Bhubaneswar.%20I'm%20a%20web%20developer%20from%20Bhubaneswar.%20I%20noticed%20you%20don't%20have%20a%20direct%20mobile-friendly%20website%20to%20showcase%20your%20digital%20menu%20%26%20take%20direct%20table%20reservations%20(without%2030%25%20aggregator%20commission).%20I've%20created%20a%20free%202-minute%20demo%20preview%20mockup%20for%20Ayeena%20Restaurant.%20Can%20I%20share%20the%20preview%20link%20with%20you%3F" target="_blank" class="btn-wa" onclick="markDone(9)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-9" onchange="toggleCard(9)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="restaurant" id="card-10">
+          <div class="info">
+            <div class="biz-name">
+              Bagicha Restaurant
+              <span class="tag">Restaurant</span>
+            </div>
+            <div class="biz-sub">📍 Bhubaneswar &nbsp;|&nbsp; 📞 +916742583962</div>
+            <div class="preview-msg">"Hi Team Bagicha Restaurant! Loved your presence in Bhubaneswar. I'm a web developer from Bhubaneswar. I noticed you don't have a direct mobile-friendly website to showcase your digital menu & take direct table reservations (without 30% aggregator commission). I've created a free 2-minute demo preview mockup for Bagicha Restaurant. Can I share the preview link with you?"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/916742583962?text=Hi%20Team%20Bagicha%20Restaurant!%20Loved%20your%20presence%20in%20Bhubaneswar.%20I'm%20a%20web%20developer%20from%20Bhubaneswar.%20I%20noticed%20you%20don't%20have%20a%20direct%20mobile-friendly%20website%20to%20showcase%20your%20digital%20menu%20%26%20take%20direct%20table%20reservations%20(without%2030%25%20aggregator%20commission).%20I've%20created%20a%20free%202-minute%20demo%20preview%20mockup%20for%20Bagicha%20Restaurant.%20Can%20I%20share%20the%20preview%20link%20with%20you%3F" target="_blank" class="btn-wa" onclick="markDone(10)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-10" onchange="toggleCard(10)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="restaurant" id="card-11">
+          <div class="info">
+            <div class="biz-name">
+              Banjara Restaurant
+              <span class="tag">Restaurant</span>
+            </div>
+            <div class="biz-sub">📍 Bhubaneswar &nbsp;|&nbsp; 📞 +916742508702</div>
+            <div class="preview-msg">"Hi Team Banjara Restaurant! Loved your presence in Bhubaneswar. I'm a web developer from Bhubaneswar. I noticed you don't have a direct mobile-friendly website to showcase your digital menu & take direct table reservations (without 30% aggregator commission). I've created a free 2-minute demo preview mockup for Banjara Restaurant. Can I share the preview link with you?"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/916742508702?text=Hi%20Team%20Banjara%20Restaurant!%20Loved%20your%20presence%20in%20Bhubaneswar.%20I'm%20a%20web%20developer%20from%20Bhubaneswar.%20I%20noticed%20you%20don't%20have%20a%20direct%20mobile-friendly%20website%20to%20showcase%20your%20digital%20menu%20%26%20take%20direct%20table%20reservations%20(without%2030%25%20aggregator%20commission).%20I've%20created%20a%20free%202-minute%20demo%20preview%20mockup%20for%20Banjara%20Restaurant.%20Can%20I%20share%20the%20preview%20link%20with%20you%3F" target="_blank" class="btn-wa" onclick="markDone(11)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-11" onchange="toggleCard(11)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="cafe" id="card-12">
+          <div class="info">
+            <div class="biz-name">
+              Ninja Café
+              <span class="tag">Cafe</span>
+            </div>
+            <div class="biz-sub">📍 Surya Nagar / Unit 6 &nbsp;|&nbsp; 📞 +918420047501</div>
+            <div class="preview-msg">"Hi Team Ninja Café! Loved your presence in Surya Nagar / Unit 6. I'm a web developer from Bhubaneswar. I noticed you don't have a direct mobile-friendly website to showcase your digital menu & take direct table reservations (without 30% aggregator commission). I've created a free 2-minute demo preview mockup for Ninja Café. Can I share the preview link with you?"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/918420047501?text=Hi%20Team%20Ninja%20Caf%C3%A9!%20Loved%20your%20presence%20in%20Surya%20Nagar%20%2F%20Unit%206.%20I'm%20a%20web%20developer%20from%20Bhubaneswar.%20I%20noticed%20you%20don't%20have%20a%20direct%20mobile-friendly%20website%20to%20showcase%20your%20digital%20menu%20%26%20take%20direct%20table%20reservations%20(without%2030%25%20aggregator%20commission).%20I've%20created%20a%20free%202-minute%20demo%20preview%20mockup%20for%20Ninja%20Caf%C3%A9.%20Can%20I%20share%20the%20preview%20link%20with%20you%3F" target="_blank" class="btn-wa" onclick="markDone(12)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-12" onchange="toggleCard(12)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="cafe" id="card-13">
+          <div class="info">
+            <div class="biz-name">
+              Cafe Maytan
+              <span class="tag">Cafe</span>
+            </div>
+            <div class="biz-sub">📍 Surya Nagar / Laxmisagar &nbsp;|&nbsp; 📞 +919114441999</div>
+            <div class="preview-msg">"Hi Team Cafe Maytan! Loved your presence in Surya Nagar / Laxmisagar. I'm a web developer from Bhubaneswar. I noticed you don't have a direct mobile-friendly website to showcase your digital menu & take direct table reservations (without 30% aggregator commission). I've created a free 2-minute demo preview mockup for Cafe Maytan. Can I share the preview link with you?"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/919114441999?text=Hi%20Team%20Cafe%20Maytan!%20Loved%20your%20presence%20in%20Surya%20Nagar%20%2F%20Laxmisagar.%20I'm%20a%20web%20developer%20from%20Bhubaneswar.%20I%20noticed%20you%20don't%20have%20a%20direct%20mobile-friendly%20website%20to%20showcase%20your%20digital%20menu%20%26%20take%20direct%20table%20reservations%20(without%2030%25%20aggregator%20commission).%20I've%20created%20a%20free%202-minute%20demo%20preview%20mockup%20for%20Cafe%20Maytan.%20Can%20I%20share%20the%20preview%20link%20with%20you%3F" target="_blank" class="btn-wa" onclick="markDone(13)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-13" onchange="toggleCard(13)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="cafe / restaurant" id="card-14">
+          <div class="info">
+            <div class="biz-name">
+              Urban Flavours
+              <span class="tag">Cafe / Restaurant</span>
+            </div>
+            <div class="biz-sub">📍 Satya Nagar / Unit 9 &nbsp;|&nbsp; 📞 +919337991922</div>
+            <div class="preview-msg">"Hi Team Urban Flavours! Loved your presence in Satya Nagar / Unit 9. I'm a web developer from Bhubaneswar. I noticed you don't have a direct mobile-friendly website to showcase your digital menu & take direct table reservations (without 30% aggregator commission). I've created a free 2-minute demo preview mockup for Urban Flavours. Can I share the preview link with you?"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/919337991922?text=Hi%20Team%20Urban%20Flavours!%20Loved%20your%20presence%20in%20Satya%20Nagar%20%2F%20Unit%209.%20I'm%20a%20web%20developer%20from%20Bhubaneswar.%20I%20noticed%20you%20don't%20have%20a%20direct%20mobile-friendly%20website%20to%20showcase%20your%20digital%20menu%20%26%20take%20direct%20table%20reservations%20(without%2030%25%20aggregator%20commission).%20I've%20created%20a%20free%202-minute%20demo%20preview%20mockup%20for%20Urban%20Flavours.%20Can%20I%20share%20the%20preview%20link%20with%20you%3F" target="_blank" class="btn-wa" onclick="markDone(14)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-14" onchange="toggleCard(14)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="cafe / fast food" id="card-15">
+          <div class="info">
+            <div class="biz-name">
+              Crunchy Munchie
+              <span class="tag">Cafe / Fast Food</span>
+            </div>
+            <div class="biz-sub">📍 Laxmisagar &nbsp;|&nbsp; 📞 +919124941601</div>
+            <div class="preview-msg">"Hi Team Crunchy Munchie! Loved your presence in Laxmisagar. I'm a web developer from Bhubaneswar. I noticed you don't have a direct mobile-friendly website to showcase your digital menu & take direct table reservations (without 30% aggregator commission). I've created a free 2-minute demo preview mockup for Crunchy Munchie. Can I share the preview link with you?"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/919124941601?text=Hi%20Team%20Crunchy%20Munchie!%20Loved%20your%20presence%20in%20Laxmisagar.%20I'm%20a%20web%20developer%20from%20Bhubaneswar.%20I%20noticed%20you%20don't%20have%20a%20direct%20mobile-friendly%20website%20to%20showcase%20your%20digital%20menu%20%26%20take%20direct%20table%20reservations%20(without%2030%25%20aggregator%20commission).%20I've%20created%20a%20free%202-minute%20demo%20preview%20mockup%20for%20Crunchy%20Munchie.%20Can%20I%20share%20the%20preview%20link%20with%20you%3F" target="_blank" class="btn-wa" onclick="markDone(15)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-15" onchange="toggleCard(15)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="gym" id="card-16">
+          <div class="info">
+            <div class="biz-name">
+              Leegend Muscle Factory
+              <span class="tag">Gym</span>
+            </div>
+            <div class="biz-sub">📍 Satyanagar &nbsp;|&nbsp; 📞 +918401749959</div>
+            <div class="preview-msg">"Hey Team Leegend Muscle Factory! I'm a web developer based in Bhubaneswar. I help fitness clubs in BBSR get more walk-ins by adding a simple website with 1-day free trial signups & trainer profiles. I put together a quick design concept for Leegend Muscle Factory—mind if I share a 1-minute look with you?"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/918401749959?text=Hey%20Team%20Leegend%20Muscle%20Factory!%20I'm%20a%20web%20developer%20based%20in%20Bhubaneswar.%20I%20help%20fitness%20clubs%20in%20BBSR%20get%20more%20walk-ins%20by%20adding%20a%20simple%20website%20with%201-day%20free%20trial%20signups%20%26%20trainer%20profiles.%20I%20put%20together%20a%20quick%20design%20concept%20for%20Leegend%20Muscle%20Factory%E2%80%94mind%20if%20I%20share%20a%201-minute%20look%20with%20you%3F" target="_blank" class="btn-wa" onclick="markDone(16)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-16" onchange="toggleCard(16)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="gym" id="card-17">
+          <div class="info">
+            <div class="biz-name">
+              Kalinga Fitness Gym
+              <span class="tag">Gym</span>
+            </div>
+            <div class="biz-sub">📍 Nayapalli &nbsp;|&nbsp; 📞 +918460429791</div>
+            <div class="preview-msg">"Hey Team Kalinga Fitness Gym! I'm a web developer based in Bhubaneswar. I help fitness clubs in BBSR get more walk-ins by adding a simple website with 1-day free trial signups & trainer profiles. I put together a quick design concept for Kalinga Fitness Gym—mind if I share a 1-minute look with you?"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/918460429791?text=Hey%20Team%20Kalinga%20Fitness%20Gym!%20I'm%20a%20web%20developer%20based%20in%20Bhubaneswar.%20I%20help%20fitness%20clubs%20in%20BBSR%20get%20more%20walk-ins%20by%20adding%20a%20simple%20website%20with%201-day%20free%20trial%20signups%20%26%20trainer%20profiles.%20I%20put%20together%20a%20quick%20design%20concept%20for%20Kalinga%20Fitness%20Gym%E2%80%94mind%20if%20I%20share%20a%201-minute%20look%20with%20you%3F" target="_blank" class="btn-wa" onclick="markDone(17)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-17" onchange="toggleCard(17)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="gym" id="card-18">
+          <div class="info">
+            <div class="biz-name">
+              Ad Fitness (Pokhariput)
+              <span class="tag">Gym</span>
+            </div>
+            <div class="biz-sub">📍 Pokhariput &nbsp;|&nbsp; 📞 +918511504717</div>
+            <div class="preview-msg">"Hey Team Ad Fitness (Pokhariput)! I'm a web developer based in Bhubaneswar. I help fitness clubs in BBSR get more walk-ins by adding a simple website with 1-day free trial signups & trainer profiles. I put together a quick design concept for Ad Fitness (Pokhariput)—mind if I share a 1-minute look with you?"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/918511504717?text=Hey%20Team%20Ad%20Fitness%20(Pokhariput)!%20I'm%20a%20web%20developer%20based%20in%20Bhubaneswar.%20I%20help%20fitness%20clubs%20in%20BBSR%20get%20more%20walk-ins%20by%20adding%20a%20simple%20website%20with%201-day%20free%20trial%20signups%20%26%20trainer%20profiles.%20I%20put%20together%20a%20quick%20design%20concept%20for%20Ad%20Fitness%20(Pokhariput)%E2%80%94mind%20if%20I%20share%20a%201-minute%20look%20with%20you%3F" target="_blank" class="btn-wa" onclick="markDone(18)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-18" onchange="toggleCard(18)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="gym" id="card-19">
+          <div class="info">
+            <div class="biz-name">
+              Ad Fitness (Lewis Road)
+              <span class="tag">Gym</span>
+            </div>
+            <div class="biz-sub">📍 Lewis Road &nbsp;|&nbsp; 📞 +918460442769</div>
+            <div class="preview-msg">"Hey Team Ad Fitness (Lewis Road)! I'm a web developer based in Bhubaneswar. I help fitness clubs in BBSR get more walk-ins by adding a simple website with 1-day free trial signups & trainer profiles. I put together a quick design concept for Ad Fitness (Lewis Road)—mind if I share a 1-minute look with you?"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/918460442769?text=Hey%20Team%20Ad%20Fitness%20(Lewis%20Road)!%20I'm%20a%20web%20developer%20based%20in%20Bhubaneswar.%20I%20help%20fitness%20clubs%20in%20BBSR%20get%20more%20walk-ins%20by%20adding%20a%20simple%20website%20with%201-day%20free%20trial%20signups%20%26%20trainer%20profiles.%20I%20put%20together%20a%20quick%20design%20concept%20for%20Ad%20Fitness%20(Lewis%20Road)%E2%80%94mind%20if%20I%20share%20a%201-minute%20look%20with%20you%3F" target="_blank" class="btn-wa" onclick="markDone(19)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-19" onchange="toggleCard(19)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="gym / fitness" id="card-20">
+          <div class="info">
+            <div class="biz-name">
+              Mitus Ladies Health Club
+              <span class="tag">Gym / Fitness</span>
+            </div>
+            <div class="biz-sub">📍 Bhubaneswar &nbsp;|&nbsp; 📞 +919725349239</div>
+            <div class="preview-msg">"Hey Team Mitus Ladies Health Club! I'm a web developer based in Bhubaneswar. I help fitness clubs in BBSR get more walk-ins by adding a simple website with 1-day free trial signups & trainer profiles. I put together a quick design concept for Mitus Ladies Health Club—mind if I share a 1-minute look with you?"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/919725349239?text=Hey%20Team%20Mitus%20Ladies%20Health%20Club!%20I'm%20a%20web%20developer%20based%20in%20Bhubaneswar.%20I%20help%20fitness%20clubs%20in%20BBSR%20get%20more%20walk-ins%20by%20adding%20a%20simple%20website%20with%201-day%20free%20trial%20signups%20%26%20trainer%20profiles.%20I%20put%20together%20a%20quick%20design%20concept%20for%20Mitus%20Ladies%20Health%20Club%E2%80%94mind%20if%20I%20share%20a%201-minute%20look%20with%20you%3F" target="_blank" class="btn-wa" onclick="markDone(20)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-20" onchange="toggleCard(20)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="gym" id="card-21">
+          <div class="info">
+            <div class="biz-name">
+              Power Gym
+              <span class="tag">Gym</span>
+            </div>
+            <div class="biz-sub">📍 Bhubaneswar &nbsp;|&nbsp; 📞 +919724650535</div>
+            <div class="preview-msg">"Hey Team Power Gym! I'm a web developer based in Bhubaneswar. I help fitness clubs in BBSR get more walk-ins by adding a simple website with 1-day free trial signups & trainer profiles. I put together a quick design concept for Power Gym—mind if I share a 1-minute look with you?"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/919724650535?text=Hey%20Team%20Power%20Gym!%20I'm%20a%20web%20developer%20based%20in%20Bhubaneswar.%20I%20help%20fitness%20clubs%20in%20BBSR%20get%20more%20walk-ins%20by%20adding%20a%20simple%20website%20with%201-day%20free%20trial%20signups%20%26%20trainer%20profiles.%20I%20put%20together%20a%20quick%20design%20concept%20for%20Power%20Gym%E2%80%94mind%20if%20I%20share%20a%201-minute%20look%20with%20you%3F" target="_blank" class="btn-wa" onclick="markDone(21)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-21" onchange="toggleCard(21)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="clinic" id="card-22">
+          <div class="info">
+            <div class="biz-name">
+              The Health Clinic
+              <span class="tag">Clinic</span>
+            </div>
+            <div class="biz-sub">📍 Rajmahal Ashok Market &nbsp;|&nbsp; 📞 +919437002720</div>
+            <div class="preview-msg">"Hello Team The Health Clinic, greetings from Bhubaneswar! I'm a local web developer helping clinics set up simple online appointment booking and doctor schedules so patients don't have to keep calling your reception. Would you be open to seeing a free sample layout preview tailored for The Health Clinic? Thank you!"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/919437002720?text=Hello%20Team%20The%20Health%20Clinic%2C%20greetings%20from%20Bhubaneswar!%20I'm%20a%20local%20web%20developer%20helping%20clinics%20set%20up%20simple%20online%20appointment%20booking%20and%20doctor%20schedules%20so%20patients%20don't%20have%20to%20keep%20calling%20your%20reception.%20Would%20you%20be%20open%20to%20seeing%20a%20free%20sample%20layout%20preview%20tailored%20for%20The%20Health%20Clinic%3F%20Thank%20you!" target="_blank" class="btn-wa" onclick="markDone(22)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-22" onchange="toggleCard(22)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="clinic" id="card-23">
+          <div class="info">
+            <div class="biz-name">
+              Smile Revival Dental Clinic
+              <span class="tag">Clinic</span>
+            </div>
+            <div class="biz-sub">📍 Sailashree Vihar &nbsp;|&nbsp; 📞 +919861213056</div>
+            <div class="preview-msg">"Hello Team Smile Revival Dental Clinic, greetings from Bhubaneswar! I'm a local web developer helping clinics set up simple online appointment booking and doctor schedules so patients don't have to keep calling your reception. Would you be open to seeing a free sample layout preview tailored for Smile Revival Dental Clinic? Thank you!"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/919861213056?text=Hello%20Team%20Smile%20Revival%20Dental%20Clinic%2C%20greetings%20from%20Bhubaneswar!%20I'm%20a%20local%20web%20developer%20helping%20clinics%20set%20up%20simple%20online%20appointment%20booking%20and%20doctor%20schedules%20so%20patients%20don't%20have%20to%20keep%20calling%20your%20reception.%20Would%20you%20be%20open%20to%20seeing%20a%20free%20sample%20layout%20preview%20tailored%20for%20Smile%20Revival%20Dental%20Clinic%3F%20Thank%20you!" target="_blank" class="btn-wa" onclick="markDone(23)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-23" onchange="toggleCard(23)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="clinic" id="card-24">
+          <div class="info">
+            <div class="biz-name">
+              Kalinga Centre for Advance Dental
+              <span class="tag">Clinic</span>
+            </div>
+            <div class="biz-sub">📍 Madhusudan Nagar &nbsp;|&nbsp; 📞 +918658263639</div>
+            <div class="preview-msg">"Hello Team Kalinga Centre for Advance Dental, greetings from Bhubaneswar! I'm a local web developer helping clinics set up simple online appointment booking and doctor schedules so patients don't have to keep calling your reception. Would you be open to seeing a free sample layout preview tailored for Kalinga Centre for Advance Dental? Thank you!"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/918658263639?text=Hello%20Team%20Kalinga%20Centre%20for%20Advance%20Dental%2C%20greetings%20from%20Bhubaneswar!%20I'm%20a%20local%20web%20developer%20helping%20clinics%20set%20up%20simple%20online%20appointment%20booking%20and%20doctor%20schedules%20so%20patients%20don't%20have%20to%20keep%20calling%20your%20reception.%20Would%20you%20be%20open%20to%20seeing%20a%20free%20sample%20layout%20preview%20tailored%20for%20Kalinga%20Centre%20for%20Advance%20Dental%3F%20Thank%20you!" target="_blank" class="btn-wa" onclick="markDone(24)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-24" onchange="toggleCard(24)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="clinic" id="card-25">
+          <div class="info">
+            <div class="biz-name">
+              32 Gems Of Smile
+              <span class="tag">Clinic</span>
+            </div>
+            <div class="biz-sub">📍 Unit-6 Ekamra Marg &nbsp;|&nbsp; 📞 +919938412200</div>
+            <div class="preview-msg">"Hello Team 32 Gems Of Smile, greetings from Bhubaneswar! I'm a local web developer helping clinics set up simple online appointment booking and doctor schedules so patients don't have to keep calling your reception. Would you be open to seeing a free sample layout preview tailored for 32 Gems Of Smile? Thank you!"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/919938412200?text=Hello%20Team%2032%20Gems%20Of%20Smile%2C%20greetings%20from%20Bhubaneswar!%20I'm%20a%20local%20web%20developer%20helping%20clinics%20set%20up%20simple%20online%20appointment%20booking%20and%20doctor%20schedules%20so%20patients%20don't%20have%20to%20keep%20calling%20your%20reception.%20Would%20you%20be%20open%20to%20seeing%20a%20free%20sample%20layout%20preview%20tailored%20for%2032%20Gems%20Of%20Smile%3F%20Thank%20you!" target="_blank" class="btn-wa" onclick="markDone(25)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-25" onchange="toggleCard(25)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="clinic" id="card-26">
+          <div class="info">
+            <div class="biz-name">
+              Hope Gastro & Liver Clinic
+              <span class="tag">Clinic</span>
+            </div>
+            <div class="biz-sub">📍 Kharvel Nagar &nbsp;|&nbsp; 📞 +919238582444</div>
+            <div class="preview-msg">"Hello Team Hope Gastro & Liver Clinic, greetings from Bhubaneswar! I'm a local web developer helping clinics set up simple online appointment booking and doctor schedules so patients don't have to keep calling your reception. Would you be open to seeing a free sample layout preview tailored for Hope Gastro & Liver Clinic? Thank you!"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/919238582444?text=Hello%20Team%20Hope%20Gastro%20%26%20Liver%20Clinic%2C%20greetings%20from%20Bhubaneswar!%20I'm%20a%20local%20web%20developer%20helping%20clinics%20set%20up%20simple%20online%20appointment%20booking%20and%20doctor%20schedules%20so%20patients%20don't%20have%20to%20keep%20calling%20your%20reception.%20Would%20you%20be%20open%20to%20seeing%20a%20free%20sample%20layout%20preview%20tailored%20for%20Hope%20Gastro%20%26%20Liver%20Clinic%3F%20Thank%20you!" target="_blank" class="btn-wa" onclick="markDone(26)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-26" onchange="toggleCard(26)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="clinic" id="card-27">
+          <div class="info">
+            <div class="biz-name">
+              Winika Clinics
+              <span class="tag">Clinic</span>
+            </div>
+            <div class="biz-sub">📍 Saheed Nagar &nbsp;|&nbsp; 📞 +918338000661</div>
+            <div class="preview-msg">"Hello Team Winika Clinics, greetings from Bhubaneswar! I'm a local web developer helping clinics set up simple online appointment booking and doctor schedules so patients don't have to keep calling your reception. Would you be open to seeing a free sample layout preview tailored for Winika Clinics? Thank you!"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/918338000661?text=Hello%20Team%20Winika%20Clinics%2C%20greetings%20from%20Bhubaneswar!%20I'm%20a%20local%20web%20developer%20helping%20clinics%20set%20up%20simple%20online%20appointment%20booking%20and%20doctor%20schedules%20so%20patients%20don't%20have%20to%20keep%20calling%20your%20reception.%20Would%20you%20be%20open%20to%20seeing%20a%20free%20sample%20layout%20preview%20tailored%20for%20Winika%20Clinics%3F%20Thank%20you!" target="_blank" class="btn-wa" onclick="markDone(27)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-27" onchange="toggleCard(27)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="clinic / healthcare" id="card-28">
+          <div class="info">
+            <div class="biz-name">
+              2050 Healthcare
+              <span class="tag">Clinic / Healthcare</span>
+            </div>
+            <div class="biz-sub">📍 Patia DLF Cyber City &nbsp;|&nbsp; 📞 +917077111222</div>
+            <div class="preview-msg">"Hello Team 2050 Healthcare, greetings from Bhubaneswar! I'm a local web developer helping clinics set up simple online appointment booking and doctor schedules so patients don't have to keep calling your reception. Would you be open to seeing a free sample layout preview tailored for 2050 Healthcare? Thank you!"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/917077111222?text=Hello%20Team%202050%20Healthcare%2C%20greetings%20from%20Bhubaneswar!%20I'm%20a%20local%20web%20developer%20helping%20clinics%20set%20up%20simple%20online%20appointment%20booking%20and%20doctor%20schedules%20so%20patients%20don't%20have%20to%20keep%20calling%20your%20reception.%20Would%20you%20be%20open%20to%20seeing%20a%20free%20sample%20layout%20preview%20tailored%20for%202050%20Healthcare%3F%20Thank%20you!" target="_blank" class="btn-wa" onclick="markDone(28)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-28" onchange="toggleCard(28)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="clinic" id="card-29">
+          <div class="info">
+            <div class="biz-name">
+              Aastha Dental Care
+              <span class="tag">Clinic</span>
+            </div>
+            <div class="biz-sub">📍 Madhusudan Nagar &nbsp;|&nbsp; 📞 +918249019847</div>
+            <div class="preview-msg">"Hello Team Aastha Dental Care, greetings from Bhubaneswar! I'm a local web developer helping clinics set up simple online appointment booking and doctor schedules so patients don't have to keep calling your reception. Would you be open to seeing a free sample layout preview tailored for Aastha Dental Care? Thank you!"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/918249019847?text=Hello%20Team%20Aastha%20Dental%20Care%2C%20greetings%20from%20Bhubaneswar!%20I'm%20a%20local%20web%20developer%20helping%20clinics%20set%20up%20simple%20online%20appointment%20booking%20and%20doctor%20schedules%20so%20patients%20don't%20have%20to%20keep%20calling%20your%20reception.%20Would%20you%20be%20open%20to%20seeing%20a%20free%20sample%20layout%20preview%20tailored%20for%20Aastha%20Dental%20Care%3F%20Thank%20you!" target="_blank" class="btn-wa" onclick="markDone(29)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-29" onchange="toggleCard(29)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="clinic" id="card-30">
+          <div class="info">
+            <div class="biz-name">
+              Aesthetica
+              <span class="tag">Clinic</span>
+            </div>
+            <div class="biz-sub">📍 Jayadev Vihar &nbsp;|&nbsp; 📞 +919437490022</div>
+            <div class="preview-msg">"Hello Team Aesthetica, greetings from Bhubaneswar! I'm a local web developer helping clinics set up simple online appointment booking and doctor schedules so patients don't have to keep calling your reception. Would you be open to seeing a free sample layout preview tailored for Aesthetica? Thank you!"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/919437490022?text=Hello%20Team%20Aesthetica%2C%20greetings%20from%20Bhubaneswar!%20I'm%20a%20local%20web%20developer%20helping%20clinics%20set%20up%20simple%20online%20appointment%20booking%20and%20doctor%20schedules%20so%20patients%20don't%20have%20to%20keep%20calling%20your%20reception.%20Would%20you%20be%20open%20to%20seeing%20a%20free%20sample%20layout%20preview%20tailored%20for%20Aesthetica%3F%20Thank%20you!" target="_blank" class="btn-wa" onclick="markDone(30)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-30" onchange="toggleCard(30)"> Sent
+            </label>
+          </div>
+        </div>
+      
+        <div class="card" data-category="diagnostics" id="card-31">
+          <div class="info">
+            <div class="biz-name">
+              Agilus Diagnostics
+              <span class="tag">Diagnostics</span>
+            </div>
+            <div class="biz-sub">📍 Ekamra Marg &nbsp;|&nbsp; 📞 +918037839039</div>
+            <div class="preview-msg">"Hello Team Agilus Diagnostics, greetings from Bhubaneswar! I'm a local web developer helping clinics set up simple online appointment booking and doctor schedules so patients don't have to keep calling your reception. Would you be open to seeing a free sample layout preview tailored for Agilus Diagnostics? Thank you!"</div>
+          </div>
+          <div class="action">
+            <a href="https://wa.me/918037839039?text=Hello%20Team%20Agilus%20Diagnostics%2C%20greetings%20from%20Bhubaneswar!%20I'm%20a%20local%20web%20developer%20helping%20clinics%20set%20up%20simple%20online%20appointment%20booking%20and%20doctor%20schedules%20so%20patients%20don't%20have%20to%20keep%20calling%20your%20reception.%20Would%20you%20be%20open%20to%20seeing%20a%20free%20sample%20layout%20preview%20tailored%20for%20Agilus%20Diagnostics%3F%20Thank%20you!" target="_blank" class="btn-wa" onclick="markDone(31)">
+              💬 Chat on WhatsApp
+            </a>
+            <label class="check-label">
+              <input type="checkbox" id="chk-31" onchange="toggleCard(31)"> Sent
+            </label>
+          </div>
+        </div>
+      
+    </div>
+
+    
+  </div>
+
+  <script>
+    function updateCount() {
+      const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
+      document.getElementById('contactedCount').textContent = 'Contacted: ' + checked;
+    }
+
+    function toggleCard(idx) {
+      const chk = document.getElementById('chk-' + idx);
+      const card = document.getElementById('card-' + idx);
+      if (chk.checked) {
+        card.classList.add('contacted');
+        localStorage.setItem('wa_lead_' + idx, '1');
+      } else {
+        card.classList.remove('contacted');
+        localStorage.removeItem('wa_lead_' + idx);
+      }
+      updateCount();
+    }
+
+    function markDone(idx) {
+      document.getElementById('chk-' + idx).checked = true;
+      toggleCard(idx);
+    }
+
+    function filterCards(cat) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+
+      document.querySelectorAll('.card').forEach(c => {
+        const cCat = c.getAttribute('data-category');
+        if (cat === 'all') {
+          c.style.display = 'flex';
+        } else if (cat === 'cafe' && (cCat.includes('cafe') || cCat.includes('restaurant') || cCat.includes('food') || cCat.includes('bakery'))) {
+          c.style.display = 'flex';
+        } else if (cat === 'gym' && (cCat.includes('gym') || cCat.includes('fitness'))) {
+          c.style.display = 'flex';
+        } else if (cat === 'clinic' && (cCat.includes('clinic') || cCat.includes('dental') || cCat.includes('diagnostics') || cCat.includes('health'))) {
+          c.style.display = 'flex';
+        } else {
+          c.style.display = 'none';
+        }
+      });
+    }
+
+    // Restore saved state
+    window.onload = function() {
+      for (let i = 0; i < 32; i++) {
+        if (localStorage.getItem('wa_lead_' + i) === '1') {
+          const chk = document.getElementById('chk-' + i);
+          if (chk) {
+            chk.checked = true;
+            document.getElementById('card-' + i).classList.add('contacted');
+          }
+        }
+      }
+      updateCount();
+    };
+  </script>
+</body>
+</html>
